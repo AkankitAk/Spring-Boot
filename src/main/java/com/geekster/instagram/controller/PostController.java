@@ -5,15 +5,15 @@ import com.geekster.instagram.dao.UserRepo;
 import com.geekster.instagram.model.Post;
 import com.geekster.instagram.model.User;
 import com.geekster.instagram.service.PostService;
+import jakarta.annotation.Nullable;
 import org.json.HTTP;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 
@@ -29,7 +29,7 @@ public class PostController {
 
         Post post=setPost(postRequest);
         int postId=postService.savePost(post);
-        return new ResponseEntity<String>("post created , user id -"+postId, HttpStatus.CREATED);
+        return new ResponseEntity<String>("post created post id - "+postId, HttpStatus.CREATED);
     }
 
     private Post setPost(String postRequest) {
@@ -49,6 +49,18 @@ public class PostController {
         Timestamp createdTime=new Timestamp(System.currentTimeMillis());
         post.setCreatedDate(createdTime);
         return post;
+    }
 
+    @GetMapping(value = "/post")
+    public ResponseEntity<String> getPost(@RequestParam String userId,@Nullable @RequestParam String postId){
+        JSONArray postArray=postService.getPost(Integer.parseInt(userId),postId);
+        return new ResponseEntity<>(postArray.toString(),HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/post/{postId}")
+    public ResponseEntity<String> updatePost(@PathVariable String postId,@RequestBody String requestPost){
+        Post post = setPost(requestPost);
+        postService.updatePost(postId,post);
+        return new ResponseEntity<>("Post updates",HttpStatus.OK);
     }
 }
