@@ -16,13 +16,17 @@ import java.util.List;
 public class PostService {
     @Autowired
     PostRepo postRepo;
+
+//    save post which come to controller and return post id
     public int savePost(Post post) {
         Post savePost=postRepo.save(post);
         return savePost.getPostId();
     }
 
+//    get post by use id and post id
     public JSONArray getPost(int userId, String postId) {
         JSONArray postArray=new JSONArray();
+//        check if post id is not null and user id is present or not
         if(postId != null && postRepo.findById(userId).isPresent()){
             Post post=postRepo.findById(userId).get();
             JSONObject jsonObject=setPostData(post);
@@ -55,8 +59,10 @@ public class PostService {
         return masterJsonObject;
     }
 
+//    update post by post id and user send all data jo update karna chahta  hai
     public void updatePost(String postId, Post updatePost) {
         if(postRepo.findById(Integer.parseInt(postId)).isPresent()){
+
             Post olderPost=postRepo.findById(Integer.parseInt(postId)).get();
             updatePost.setPostId(olderPost.getPostId());
 

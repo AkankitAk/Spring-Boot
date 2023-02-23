@@ -16,14 +16,17 @@ import java.util.List;
 public class UserService {
     @Autowired
     UserRepo userRepo;
+
+//    save the user detail which come from the front end
     public int saveUser(User user){
         User userObject=userRepo.save(user);
         return userObject.getUserId();
     }
 
+//    get user by user id and if not give user id then send all user
     public JSONArray getUser(String userId) {
         JSONArray userArray=new JSONArray();
-
+//        check is user is present or not
          if (userId !=null && userRepo.findById(Integer.valueOf(userId)).isPresent()){
              User user=userRepo.findById(Integer.valueOf(userId)).get();
              JSONObject jsonObject = setUser(user);
@@ -50,8 +53,9 @@ public class UserService {
         return jsonObject;
     }
 
-
+//    user update by user id and user send which data will update
     public ResponseEntity updateUser(User newUser, String userId) {
+//        check user is present or not
         if (userRepo.findById(Integer.valueOf(userId)).isPresent()){
             User user=userRepo.findById(Integer.valueOf(userId)).get();
             newUser.setUserId(user.getUserId());

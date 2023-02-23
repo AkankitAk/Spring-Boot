@@ -20,6 +20,8 @@ import java.util.HashMap;
 public class UserController {
     @Autowired
     UserService userService;
+
+//    crete a new user
     @PostMapping(value = "/user")
     public ResponseEntity saveUser(@RequestBody String  userData){
         User user=setUser(userData);
@@ -27,7 +29,7 @@ public class UserController {
         return new ResponseEntity("User save with id -"+userId, HttpStatus.CREATED);
     }
 
-
+//    get user by user id and if we not give the user id then all user will come
     @GetMapping(value = "/user")
     public ResponseEntity getUser(@Nullable @RequestParam String userId){
         JSONArray userDetails=userService.getUser(userId);
@@ -35,6 +37,7 @@ public class UserController {
     }
 
 
+//    convert String user data to json object and return user
     private User setUser(String userData) {
         JSONObject jsonObject=new JSONObject(userData);
         User user=new User();
@@ -46,7 +49,7 @@ public class UserController {
         return user;
     }
 
-
+//    update user by user id
     @PutMapping(value = "/user/{userId}")
     public ResponseEntity updateUser(@PathVariable String userId,@RequestBody String userData){
         User user=setUser(userData);

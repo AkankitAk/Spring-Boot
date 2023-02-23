@@ -24,6 +24,9 @@ public class PostController {
     UserRepo userRepo;
     @Autowired
     PostService postService;
+
+//    create a new post with lazy loading
+
     @PostMapping(value = "/post")
     public ResponseEntity<String> savePost(@RequestBody String postRequest){
 
@@ -32,11 +35,13 @@ public class PostController {
         return new ResponseEntity<String>("post created post id - "+postId, HttpStatus.CREATED);
     }
 
+//    set post by user lazy loading
     private Post setPost(String postRequest) {
         JSONObject jsonObject=new JSONObject(postRequest);
         User user=null;
 
         int userId=jsonObject.getInt("userId");
+//        check if user is present or not if not present thn direct return null and if present then create a post
         if(userRepo.findById(userId).isPresent()){
             user=userRepo.findById(userId).get();
         }
@@ -51,12 +56,15 @@ public class PostController {
         return post;
     }
 
+
+//    get post by post id and user id if we not pass post id then all post get by user id
     @GetMapping(value = "/post")
     public ResponseEntity<String> getPost(@RequestParam String userId,@Nullable @RequestParam String postId){
         JSONArray postArray=postService.getPost(Integer.parseInt(userId),postId);
         return new ResponseEntity<>(postArray.toString(),HttpStatus.OK);
     }
 
+//    update post by post id
     @PutMapping(value = "/post/{postId}")
     public ResponseEntity<String> updatePost(@PathVariable String postId,@RequestBody String requestPost){
         Post post = setPost(requestPost);
