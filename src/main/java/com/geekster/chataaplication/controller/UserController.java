@@ -2,19 +2,20 @@ package com.geekster.chataaplication.controller;
 
 import com.geekster.chataaplication.Util.CommonUtils;
 import com.geekster.chataaplication.dao.StatusRepo;
+import com.geekster.chataaplication.dao.UserRepo;
 import com.geekster.chataaplication.model.Status;
 import com.geekster.chataaplication.model.User;
 import com.geekster.chataaplication.service.UserService;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.lang.Nullable;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/user")
@@ -24,17 +25,20 @@ public class UserController {
     UserService userService;
     @Autowired
     StatusRepo statusRepo;
+    @Autowired
+    UserRepo userRepo;
     @PostMapping(value = "/create")
     public ResponseEntity<String> createUser(@RequestBody String newUser){
-        JSONObject isValid=validateNewUser(newUser);
+        //validation of user data converting to JSON and checking keys
+        JSONObject isRequestValid=validateNewUser(newUser);
         int id;
         User user=new User();
-        if(isValid.isEmpty()){
+        if(isRequestValid.isEmpty()){
             user=setUser(newUser);
             id=userService.saveUser(user);
         }
         else{
-            return new ResponseEntity<>(isValid.toString(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(isRequestValid.toString(), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>("saved user id- "+id, HttpStatus.CREATED);
     }
@@ -76,6 +80,12 @@ public class UserController {
 
         if(userJson.has("username")){
             String username=userJson.getString("username");
+            // check is user is already exist on database ?
+            List<User> userList=userRepo.findByUsername(username);
+            if(!userList.isEmpty()){
+                errorList.put("username","This user is already exist");
+                return errorList;
+            }
         }
         else {
             errorList.put("username","Missing parameter");
@@ -124,6 +134,16 @@ public class UserController {
     }
 
 
+    @GetMapping(value = "/get")
+    public ResponseEntity<String> getUsers(@Nullable @RequestParam String userId){
+        JSONArray userArray=userService.getUser(userId);
+        return new ResponseEntity<>(userArray.toString(),HttpStatus.OK);
+    }
+    @DeleteMapping(value = "/delete/{")
+    public ResponseEntity<String> deleteUser(@PathVariable String userId){
+        userService.deleteUser(userId);
+        return new ResponseEntity<>("Deleted",HttpStatus.NO_CONTENT);
+    }
 }
 
 
