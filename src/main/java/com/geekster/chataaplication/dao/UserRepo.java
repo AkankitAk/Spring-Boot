@@ -17,6 +17,6 @@ public interface UserRepo extends JpaRepository<User ,Integer> {
     @Query(value = "select * from tbl_user where status_id=1",nativeQuery = true)
     public List<User> getAllUser();
 
-    @Query(value = "update tbl_user set ")
-    public List<User> deleteUserById();
+
+//    public List<User> deleteUserById();
 }

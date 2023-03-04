@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -52,7 +53,41 @@ public class UserService {
         return jsonObj;
     }
 
-    public void deleteUser(String userId) {
 
+    public JSONObject login(String username, String password) {
+        JSONObject response=new JSONObject();
+        List<User> user= userRepo.findByUsername(username);
+        if(user.isEmpty()){
+            response.put("errorMessage","Username doesn't exists");
+            return response;
+        }
+        else {
+            // get the user in 0th index
+            User userObj=user.get(0);
+            if (password.equals(userObj.getPassword())){
+                response= createResponse(userObj);
+            }else {
+                response.put("password","password is not valid");
+            }
+        }
+        return response;
+    }
+
+    public JSONObject updateUser(User user,String userId) {
+        JSONObject obj=new JSONObject();
+        List<User> userList=userRepo.getUserByUserId(Integer.parseInt(userId));
+        if (!userList.isEmpty()){
+            User oldUser=userList.get(0);
+            user.setUserId(oldUser.getUserId());
+            user.setCreatedDate(oldUser.getCreatedDate());
+            user.setPassword(oldUser.getPassword());
+            Timestamp updateTime=new Timestamp(System.currentTimeMillis());
+            user.setUpdatedDate(updateTime);
+            userRepo.save(user);
+        }
+        else {
+            obj.put("errorMessage","User doesn't exist");
+        }
+        return obj;
     }
 }
