@@ -21,17 +21,17 @@
 
 * There are two **interfaces** in the dao layer which extend the **JPARepository** and inside it, we fetch the data from the database by sending all the sql commands.
 
-# Data Structure used in project
+## Data Structure used in project
 
 * Here we are using hasMap and List data structure.
 
-# Project Summary
+## Project Summary
 
 * We are waiting for the user of this project.  We are also creating posts along with the user.
 * Lazy-loading is also applied in this.
 
 
-# Postman 
+## Postman 
  * If you want to use this project first clone this project and pate the given postman link in postman . In this way you can use the project abd run it to see how the output will come.
 >https://api.postman.com/collections/24994942-741c8260-e2f8-44d3-b869-9ac500cd08a7?access_key=PMAT-01GTS6MQQW232YGXV7RR9RXHT0
 
