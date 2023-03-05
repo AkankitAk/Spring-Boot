@@ -26,7 +26,8 @@
 * Here we are using hasMap and List data structure.
 
 ## Project Summary
-
+* In this project we can add new doctor and assign patient according to doctor.
+* Which doctor has been assigned to which patient, when has the patient arrived.  We can see all these details.
 
 
 ## Postman 
