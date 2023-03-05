@@ -26,7 +26,7 @@
 
 ## Project Summary
 
-
+* In this project we can create, delete, update and get todo.
 
 
 
