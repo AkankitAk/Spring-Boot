@@ -21,7 +21,7 @@
 
 * There are two **interfaces** in the dao layer which extend the **JPARepository** and inside it, we fetch the data from the database by sending all the sql commands.
 
-# Data Structure used in project
+## Data Structure used in project
 
 * Here we are using hasMap and List data structure.
 
