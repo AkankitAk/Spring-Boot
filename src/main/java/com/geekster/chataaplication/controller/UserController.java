@@ -167,11 +167,11 @@ public class UserController {
             return new ResponseEntity<>(isRequestValid.toString(),HttpStatus.OK);
         }
     }
-//    @DeleteMapping(value = "/delete/{")
-//    public ResponseEntity<String> deleteUser(@PathVariable String userId){
-//        userService.deleteUser(userId);
-//        return new ResponseEntity<>("Deleted",HttpStatus.NO_CONTENT);
-//    }
+    @DeleteMapping(value = "/delete/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable String userId){
+        userService.deleteUser(Integer.parseInt(userId));
+        return new ResponseEntity<>("User deleted successfully user id- "+userId, HttpStatus.NO_CONTENT);
+    }
 
 
     @PostMapping(value = "/login")

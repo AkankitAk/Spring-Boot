@@ -90,4 +90,8 @@ public class UserService {
         }
         return obj;
     }
+
+    public void deleteUser(int userId) {
+        userRepo.deleteUserByUserId(userId);
+    }
 }

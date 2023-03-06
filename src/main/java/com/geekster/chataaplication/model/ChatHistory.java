@@ -18,13 +18,13 @@ public class ChatHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int chatId;
 
-    @JoinColumn(name = "to_user_id")
+    @JoinColumn(name = "sender_user_id")
     @ManyToOne
-    private User to;
+    private User sender;
 
-    @JoinColumn(name = "from_user_id")
+    @JoinColumn(name = "receiver_user_id")
     @ManyToOne
-    private User from;
+    private User receiver;
 
     @Column(name = "message")
     private String message;
