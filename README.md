@@ -31,6 +31,6 @@
 * Use can delete his account and can see your messages, Who has been sent to whom?
 
 ## Postman
-* If you want to use this project first clone this project and pate the given postman link in postman . In this way you can use the project abd run it to see how the output will come.
+* If you want to use this project first clone this project and pate the given postman link in postman . In this way you can use the project and run it to see how the output will come.
     >https://api.postman.com/collections/24994942-c85f8b55-6340-47db-b7ba-fa8f72a85a35?access_key=PMAT-01GV0VM5R8CZXJJENRA296MBS9   
 
