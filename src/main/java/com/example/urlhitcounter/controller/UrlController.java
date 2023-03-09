@@ -13,11 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UrlController {
     @Autowired
     private UrlService urlService;
-//    @GetMapping("count")
-//    public Visit getCount(){
-//        return urlService.getVisits();
-//    }
-      @GetMapping("/username/{username}/count")
+    @GetMapping("/username/{username}/count")
     public Visit getCount(@PathVariable String username){
         return urlService.getVisits(username);
     }
