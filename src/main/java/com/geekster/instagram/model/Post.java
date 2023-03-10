@@ -1,10 +1,11 @@
 package com.geekster.instagram.model;
 
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Data
@@ -26,5 +27,12 @@ public class Post {
     @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    @JoinColumn(name = "status_id")
+    @ManyToOne
+    private Status statusId;
+    @JoinColumn(name = "security_id")
+    @ManyToOne
+    private Security securityId;
 
 }

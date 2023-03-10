@@ -2,14 +2,12 @@ package com.geekster.instagram.service;
 
 import com.geekster.instagram.dao.UserRepo;
 import com.geekster.instagram.model.User;
-import com.geekster.instagram.util.UserUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -28,9 +26,11 @@ public class UserService {
         JSONArray userArray=new JSONArray();
 //        check is user is present or not
          if (userId !=null && userRepo.findById(Integer.valueOf(userId)).isPresent()){
-             User user=userRepo.findById(Integer.valueOf(userId)).get();
-             JSONObject jsonObject = setUser(user);
-             userArray.put(jsonObject);
+             List<User> userList=userRepo.findByUserId(Integer.valueOf(userId));
+             for (User users:userList) {
+                 JSONObject jsonObject = setUser(users);
+                 userArray.put(jsonObject);
+             }
          }
          else {
              List<User> userList=userRepo.findAll();
@@ -47,6 +47,8 @@ public class UserService {
         jsonObject.put("userId",user.getUserId());
         jsonObject.put("firstName",user.getFirstName());
         jsonObject.put("lastName",user.getLastName());
+        jsonObject.put("userName",user.getUserName());
+        jsonObject.put("password",user.getPassword());
         jsonObject.put("age",user.getAge());
         jsonObject.put("email",user.getEmail());
         jsonObject.put("phoneNumber",user.getPhoneNumber());
@@ -54,22 +56,27 @@ public class UserService {
     }
 
 //    user update by user id and user send which data will update
-    public ResponseEntity updateUser(User newUser, String userId) {
+    public JSONObject updateUser(User newUser, String userId) {
+        JSONObject jsonObject=new JSONObject();
+        User user=userRepo.findById(Integer.valueOf(userId)).get();
 //        check user is present or not
-        if (userRepo.findById(Integer.valueOf(userId)).isPresent()){
-            User user=userRepo.findById(Integer.valueOf(userId)).get();
-            newUser.setUserId(user.getUserId());
+        if (user!=null){
+            User oldUser=user;
+            newUser.setUserId(oldUser.getUserId());
+
+            newUser.setPassword(oldUser.getPassword());
+            newUser.setCreateDate(oldUser.getCreateDate());
+            Timestamp updateDate=new Timestamp(System.currentTimeMillis());
+            newUser.setUpdateDate(updateDate);
             userRepo.save(newUser);
-//            user.setAge(newUser.getAge());
-//            user.setEmail(newUser.getEmail());
-//            user.setPhoneNumber(newUser.getPhoneNumber());
-//            user.setFirstName(newUser.getFirstName());
-//            user.setLastName(newUser.getLastName());
-//            userRepo.save(user);
-            return new ResponseEntity("user update successfully", HttpStatus.OK);
         }
         else {
-            return new ResponseEntity("user not found user id- "+userId,HttpStatus.BAD_REQUEST);
+            jsonObject.put("errorMessage","User doesn't exist");
         }
+        return jsonObject;
+    }
+
+    public void deleteUserById(int userId) {
+        userRepo.deleteUserById(userId);
     }
 }
